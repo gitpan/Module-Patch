@@ -8,5 +8,11 @@ README
 dist.ini
 lib/Module/Patch.pm
 t/00-compile.t
+t/01-basics.t
+t/lib/My/Target.pm
+t/lib/My/Target/patch/cat1.pm
+t/lib/My/Target/patch/cat2.pm
+t/lib/My/Target/patch/cat3.pm
+t/lib/My/Target/patch/cat4.pm
 t/release-pod-coverage.t
 t/release-pod-syntax.t

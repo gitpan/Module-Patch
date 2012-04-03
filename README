@@ -2,7 +2,7 @@ NAME
     Module::Patch - Base class for patch module
 
 VERSION
-    version 0.02
+    version 0.03
 
 SYNOPSIS
      # in your patch module
@@ -53,7 +53,7 @@ SYNOPSIS
      }
 
 DESCRIPTION
-    Module::Patch helps you create a "patch module", a module that
+    Module::Patch helps you create a *patch module*, a module that
     (monkey-)patches other module by replacing some of its subroutines.
 
     Patch module should be named *Some::Module*::patch::*your_category*. For

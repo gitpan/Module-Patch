@@ -15,11 +15,13 @@ meta-spec:
 name: Module-Patch
 requires:
   Log::Any: 0
+  Module::Load: 0
   Module::Loaded: 0
   Monkey::Patch: 0
+  Test::Exception: 0
   Test::More: 0.96
   perl: 5.010001
 resources:
   homepage: http://search.cpan.org/dist/Module-Patch/
   repository: http://github.com/sharyanto/perl-Module-Patch
-version: 0.02
+version: 0.03
