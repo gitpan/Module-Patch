@@ -17,12 +17,13 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Module-Patch",
-  "dist_version" => "0.01",
+  "dist_version" => "0.02",
   "license" => "perl",
   "module_name" => "Module::Patch",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
+    "Log::Any" => 0,
     "Module::Loaded" => 0,
     "Monkey::Patch" => 0,
     "Test::More" => "0.96",
