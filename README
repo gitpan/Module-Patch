@@ -1,0 +1,124 @@
+NAME
+    Module::Patch - Base class for patch module
+
+VERSION
+    version 0.01
+
+SYNOPSIS
+     # in your patch module
+
+     package Some::Module::patch::your_category;
+     use parent qw(Module::Patch);
+
+     sub patch_data {
+         my $foo = sub {
+             my $orig = shift;
+             ...
+         };
+         return {
+             versions => {
+                 '1.00' => {
+                     subs => {
+                         foo => $my_foo,
+                     },
+                 },
+                 '1.02 1.03' => {
+                     subs => {
+                         foo => $my_foo,
+                     },
+                 },
+             },
+         };
+     }
+
+     1;
+
+
+     # using your patch module
+
+     use Some::Module;
+     use Some::Module::patch::your_category
+         # optional, default is 'die'
+         -on_unknown_version => 'warn',
+         # optional, default is 'die'
+         -on_conflict => 'warn'
+     ;
+
+     my $o = Some::Module->new;
+     $o->foo(); # the patched version
+
+     {
+         no Some::Module::patch::your_category;
+         $o->foo(); # the original version
+     }
+
+DESCRIPTION
+    Module::Patch helps you create a "patch module", a module that
+    (monkey-)patches other module by replacing some of its subroutines.
+
+    Patch module should be named *Some::Module*::patch::*your_category*. For
+    example, HTTP::Daemon::patch::ipv6.
+
+    You specify patch information (which versions of target modules and
+    which subroutines to be replaced), while Module::Patch:
+
+    *   checks target module version
+
+        Can either die, display warning, or ignore if target module version
+        is not supported.
+
+    *   checks other patch modules for the same target version
+
+        For example, if your patch module is
+        "Some::Module::patch::your_category", it will check other loaded
+        "Some::Module::patch::*" for conflicts, i.e. whether the other patch
+        modules want to patch the same subroutines. Can either die, display
+        warning, or ignore if there are conflicts.
+
+    *   provides an import()/unimport() routine
+
+        unimport() will restore target module's original subroutines.
+
+  Specifying patch information
+    Define patch_data() method. It should return a hash as shown in
+    Synopsis.
+
+    Version can be a single version, or several versions separated by space.
+
+  Using the patch module
+    First 'use' the target module. Patch module will refuse to load unless
+    target module is already loaded.
+
+    Then 'use' the patch module. This will wrap the target subroutine(s)
+    with the one(s) provided by the patch module. There are several options
+    available when importing:
+
+    *   -on_unknown_version => 'die'|'warn'|'ignore'|'force' (default:
+        'die')
+
+        If target module's version is not listed in the patch module, the
+        default is to die. 'warn' will display a warning and refuse to
+        patch. 'ignore' will refuse to patch without warning. 'force' will
+        display warning and proceed with patching.
+
+    *   -on_conflict => 'die'|'warn'|'ignore'|'force' (default: 'die')
+
+        If there is a conflict with other patch module(s), the default is to
+        die. 'warn' will display a warning and refuse to patch. 'ignore'
+        will refuse to patch without warning. 'force' will display warning
+        and proceed with patching.
+
+    If you are done and want to restore, unimport ('no' the patch module).
+
+SEE ALSO
+    Pod::Weaver::Plugin::ModulePatch
+
+AUTHOR
+    Steven Haryanto <stevenharyanto@gmail.com>
+
+COPYRIGHT AND LICENSE
+    This software is copyright (c) 2012 by Steven Haryanto.
+
+    This is free software; you can redistribute it and/or modify it under
+    the same terms as the Perl 5 programming language system itself.
+
