@@ -2,7 +2,7 @@ NAME
     Module::Patch - Base class for patch module
 
 VERSION
-    version 0.04
+    version 0.05
 
 SYNOPSIS
      # in your patch module
@@ -95,12 +95,10 @@ DESCRIPTION
     Version can be a single version, or several versions separated by space.
 
   Using the patch module
-    First 'use' the target module. Patch module will refuse to load unless
-    target module is already loaded.
-
-    Then 'use' the patch module. This will wrap the target subroutine(s)
-    with the one(s) provided by the patch module. There are several options
-    available when importing:
+    You simply 'use' the patch module. If the target module is not loaded,
+    it will be loaded by the patch module. The patch module will then wrap
+    the target subroutine(s) with the one(s) provided by the patch module.
+    There are several options available when importing:
 
     *   -on_unknown_version => 'die'|'warn'|'ignore'|'force' (default:
         'die')
@@ -116,6 +114,13 @@ DESCRIPTION
         die. 'warn' will display a warning and refuse to patch. 'ignore'
         will refuse to patch without warning. 'force' will display warning
         and proceed with patching.
+
+    *   -load_target => BOOL (default: 1)
+
+        Whether to attempt to load target module if it's not loaded.
+        Normally you want to keep this on, unless the target module is
+        'main' or already defined somewhere else (not in the usual
+        Module/SubModule.pm file expected by require()).
 
     If you are done and want to restore, unimport ('no' the patch module).
 

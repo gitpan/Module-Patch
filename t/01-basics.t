@@ -26,8 +26,8 @@ sub no_ {
     $mod->unimport;
 }
 
-throws_ok { use_ "My::Target::patch::cat1" } qr/before/,
-    'target module must be loaded before patch module';
+throws_ok { use_ "My::Target::patch::cat1", -load_target=>0 } qr/before/,
+    'target module must be loaded before patch module (-load_target=0)';
 
 subtest "version matching" => sub {
     my @tests = (
@@ -49,7 +49,8 @@ subtest "version matching" => sub {
     }
 };
 
-use_ "My::Target";
+throws_ok { use_ "My::Target::patch::cat1", -zzz=>0 } qr/unknown/i,
+    'unknown option -> dies';
 
 lives_ok { use_ "My::Target::patch::cat1" } 'patch module can be loaded';
 is(My::Target::foo(), "foo from My::Target::patch::cat1", "subroutine patched");
