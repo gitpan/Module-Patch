@@ -1,0 +1,52 @@
+{
+   "abstract" : "Base class for patch module",
+   "author" : [
+      "Steven Haryanto <stevenharyanto@gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300006, CPAN::Meta::Converter version 2.113640",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Module-Patch",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.3601"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Log::Any" : 0,
+            "Module::Loaded" : 0,
+            "Monkey::Patch" : 0,
+            "perl" : "5.010001"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Module::Load" : 0,
+            "Test::Exception" : 0,
+            "Test::More" : "0.96"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "homepage" : "http://search.cpan.org/dist/Module-Patch/",
+      "repository" : {
+         "url" : "http://github.com/sharyanto/perl-Module-Patch"
+      }
+   },
+   "version" : "0.04"
+}
+

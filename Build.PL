@@ -7,7 +7,10 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
-    "Module::Build" => "0.3601"
+    "Module::Build" => "0.3601",
+    "Module::Load" => 0,
+    "Test::Exception" => 0,
+    "Test::More" => "0.96"
   },
   "configure_requires" => {
     "Module::Build" => "0.3601"
@@ -17,18 +20,15 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Module-Patch",
-  "dist_version" => "0.03",
+  "dist_version" => "0.04",
   "license" => "perl",
   "module_name" => "Module::Patch",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
     "Log::Any" => 0,
-    "Module::Load" => 0,
     "Module::Loaded" => 0,
     "Monkey::Patch" => 0,
-    "Test::Exception" => 0,
-    "Test::More" => "0.96",
     "perl" => "5.010001"
   },
   "script_files" => []

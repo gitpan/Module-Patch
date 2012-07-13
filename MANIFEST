@@ -3,6 +3,7 @@ Changes
 LICENSE
 MANIFEST
 MANIFEST.SKIP
+META.json
 META.yml
 README
 dist.ini
@@ -14,5 +15,6 @@ t/lib/My/Target/patch/cat1.pm
 t/lib/My/Target/patch/cat2.pm
 t/lib/My/Target/patch/cat3.pm
 t/lib/My/Target/patch/cat4.pm
+t/lib/My/Target/patch/unknownsub.pm
 t/release-pod-coverage.t
 t/release-pod-syntax.t

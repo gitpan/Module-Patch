@@ -2,7 +2,7 @@ NAME
     Module::Patch - Base class for patch module
 
 VERSION
-    version 0.03
+    version 0.04
 
 SYNOPSIS
      # in your patch module
@@ -11,21 +11,30 @@ SYNOPSIS
      use parent qw(Module::Patch);
 
      sub patch_data {
-         my $foo = sub {
+         my $my_foo = sub {
              my $orig = shift;
              ...
          };
          return {
              versions => {
+                 # version specification can be a single version string
                  '1.00' => {
                      subs => {
                          foo => $my_foo,
+                         bar => sub { ... },
+                         ...
                      },
                  },
-                 '1.02 1.03' => {
-                     subs => {
-                         foo => $my_foo,
-                     },
+
+                 # or multiple versions, separated by whitespace
+                 '1.02 1.03 /^2\..+$/' => {
+                     ...
+                 },
+
+                 # also can contain a regex (/.../), no spaces in regex though. and
+                 # watch out for escapes.
+                 '1.99 /^2[.].+$/' => {
+                     ...
                  },
              },
          };
