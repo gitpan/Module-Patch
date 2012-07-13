@@ -7,6 +7,7 @@ use Module::Build 0.3601;
 
 my %module_build_args = (
   "build_requires" => {
+    "Capture::Tiny" => 0,
     "Module::Build" => "0.3601",
     "Module::Load" => 0,
     "Test::Exception" => 0,
@@ -20,7 +21,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Module-Patch",
-  "dist_version" => "0.05",
+  "dist_version" => "0.06",
   "license" => "perl",
   "module_name" => "Module::Patch",
   "recommends" => {},

@@ -34,6 +34,7 @@
       },
       "test" : {
          "requires" : {
+            "Capture::Tiny" : 0,
             "Module::Load" : 0,
             "Test::Exception" : 0,
             "Test::More" : "0.96"
@@ -47,6 +48,6 @@
          "url" : "http://github.com/sharyanto/perl-Module-Patch"
       }
    },
-   "version" : "0.05"
+   "version" : "0.06"
 }
 

@@ -3,6 +3,7 @@ abstract: 'Base class for patch module'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
+  Capture::Tiny: 0
   Module::Build: 0.3601
   Module::Load: 0
   Test::Exception: 0
@@ -24,4 +25,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Module-Patch/
   repository: http://github.com/sharyanto/perl-Module-Patch
-version: 0.05
+version: 0.06

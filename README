@@ -2,7 +2,7 @@ NAME
     Module::Patch - Base class for patch module
 
 VERSION
-    version 0.05
+    version 0.06
 
 SYNOPSIS
      # in your patch module
