@@ -1,131 +1,143 @@
 NAME
-    Module::Patch - Base class for patch module
+    Module::Patch - Patch package with a set of patches
 
 VERSION
-    version 0.06
+    version 0.07
 
 SYNOPSIS
+    To use Module::Patch directly:
+
+     # patching DBI modules so that
+
+     use Module::Patch qw(patch_package);
+     use Log::Any '$log';
+     patch_package(['DBI', 'DBI::st', 'DBI::db'], [
+         {action=>'wrap', mod_version=>':all', sub_name=>':public', code=>sub {
+             my $ctx      = shift;
+             my $orig_sub = shift;
+             $log->tracef("Entering %s(%s) ...", $ctx->{orig_name}, \@_);
+             my $res;
+             if (wantarray) { $res=[$orig_sub->(@_)] } else { $res=$orig_sub->(@_) }
+             $log->tracef("Returned from %s", $ctx->{orig_name});
+             if (wantarray) { return @$res } else { return $res }
+         }},
+     ]);
+
+    To create a patch module by subclassing Module::Patch:
+
      # in your patch module
 
      package Some::Module::patch::your_category;
      use parent qw(Module::Patch);
 
      sub patch_data {
-         my $my_foo = sub {
-             my $orig = shift;
-             ...
-         };
          return {
-             versions => {
-                 # version specification can be a single version string
-                 '1.00' => {
-                     subs => {
-                         foo => $my_foo,
-                         bar => sub { ... },
-                         ...
-                     },
+             v => 2,
+             patches => [...], # $patches_spec
+             config => { # per-patch-module config
+                 a => {
+                     default => 1,
                  },
-
-                 # or multiple versions, separated by whitespace
-                 '1.02 1.03 /^2\..+$/' => {
-                     ...
-                 },
-
-                 # also can contain a regex (/.../), no spaces in regex though. and
-                 # watch out for escapes.
-                 '1.99 /^2[.].+$/' => {
-                     ...
+                 b => {},
+                 c => {
+                     default => 3,
                  },
              },
          };
      }
-
      1;
-
 
      # using your patch module
 
-     use Some::Module;
      use Some::Module::patch::your_category
-         # optional, default is 'die'
-         -on_unknown_version => 'warn',
-         # optional, default is 'die'
-         -on_conflict => 'warn'
+         -force => 1, # optional, force patch even if target version does not match
+         -config => {a=>10, b=>20}, # optional, set config value
      ;
 
-     my $o = Some::Module->new;
-     $o->foo(); # the patched version
+     # accessing per-patch-module config data
 
-     {
-         no Some::Module::patch::your_category;
-         $o->foo(); # the original version
-     }
+     print $Some::Module::patch::your_category::config->{a}; # 10
+     print $Some::Module::patch::your_category::config->{c}; # 3, default value
+
+     # unpatch, restore original subroutines
+     no Some::Module::patch::your_category;
 
 DESCRIPTION
-    Module::Patch helps you create a *patch module*, a module that
-    (monkey-)patches other module by replacing some of its subroutines.
+    Module::Patch is basically a convenient way to define and bundle a set
+    of patches. Actual patching is done by the nice Monkey::Patch, which
+    provides lexically scoped patching.
 
-    Patch module should be named *Some::Module*::patch::*your_category*. For
-    example, HTTP::Daemon::patch::ipv6.
+    There are two ways to use this module:
 
-    You specify patch information (which versions of target modules and
-    which subroutines to be replaced), while Module::Patch:
+    *   subclass it
 
-    *   checks target module version
+        This is used for convenient bundling of patches. You create a *patch
+        module* (a module that monkey-patches other module by
+        adding/wrapping/deleting subroutines of target module) by
+        subclassing Module::Patch and providing the patches_spec in
+        patch_data() method.
 
-        Can either die, display warning, or ignore if target module version
-        is not supported.
+        Patch module should be named *Some::Module*::patch::*your_category*.
+        For example, HTTP::Daemon::patch::ipv6.
 
-    *   checks other patch modules for the same target version
+    *   require/import it directly
 
-        For example, if your patch module is
-        "Some::Module::patch::your_category", it will check other loaded
-        "Some::Module::patch::*" for conflicts, i.e. whether the other patch
-        modules want to patch the same subroutines. Can either die, display
-        warning, or ignore if there are conflicts.
+        Module::Patch provides patch_package which is the actual routine to
+        do the patching.
 
-    *   provides an import()/unimport() routine
+FUNCTIONS
+  import()
+    If imported directly, will export @exports as arguments and export
+    requested symbols.
 
-        unimport() will restore target module's original subroutines.
+    If imported from subclass, will take %opts as arguments and run
+    patch_package() on caller package. %opts include:
 
-  Specifying patch information
-    Define patch_data() method. It should return a hash as shown in
-    Synopsis.
+    *   -load_target => BOOL (default 1)
 
-    Version can be a single version, or several versions separated by space.
+        Load target modules. Set to 0 if package is already defined in other
+        files and cannot be require()-ed.
 
-  Using the patch module
-    You simply 'use' the patch module. If the target module is not loaded,
-    it will be loaded by the patch module. The patch module will then wrap
-    the target subroutine(s) with the one(s) provided by the patch module.
-    There are several options available when importing:
+    *   -force => BOOL
 
-    *   -on_unknown_version => 'die'|'warn'|'ignore'|'force' (default:
-        'die')
+        Will be passed to patch_package's \%opts.
 
-        If target module's version is not listed in the patch module, the
-        default is to die. 'warn' will display a warning and refuse to
-        patch. 'ignore' will refuse to patch without warning. 'force' will
-        display warning and proceed with patching.
+  patch_package($package, $patches_spec, \%opts)
+    Patch target package $package with a set of patches.
 
-    *   -on_conflict => 'die'|'warn'|'ignore'|'force' (default: 'die')
+    $patches_spec is an arrayref containing a series of patch specification.
+    Patch specification is a hashref containing these keys: "action"
+    (string, required; either 'wrap', 'add', 'delete'), "mod_version"
+    (string/regex or array of string/regex, can be ':all' to mean all
+    versions; optional; defaults to ':all'). "sub_name" (string/regex or
+    array of string/regex, subroutine(s) to patch, can be ':all' to mean all
+    subroutine, ':public' to mean all public subroutines [those not prefixed
+    by "_"], ':private' to mean all private), "code" (coderef, not required
+    if "action" is 'delete').
 
-        If there is a conflict with other patch module(s), the default is to
-        die. 'warn' will display a warning and refuse to patch. 'ignore'
-        will refuse to patch without warning. 'force' will display warning
-        and proceed with patching.
+    Die if there is conflict when patching, for example if target module has
+    been patched 'delete' and another patch wants to 'wrap' it.
 
-    *   -load_target => BOOL (default: 1)
+    NOTE: Action 'add', 'delete', and conflict checking not yet implemented.
 
-        Whether to attempt to load target module if it's not loaded.
-        Normally you want to keep this on, unless the target module is
-        'main' or already defined somewhere else (not in the usual
-        Module/SubModule.pm file expected by require()).
+    Known options:
 
-    If you are done and want to restore, unimport ('no' the patch module).
+    *   force => BOOL (default 0)
+
+        Force patching even if target module version does not match. The
+        default is to warn and skip patching.
 
 SEE ALSO
+    Monkey::Patch
+
     Pod::Weaver::Plugin::ModulePatch
+
+    Some examples of patch modules that use Module::Patch by subclassing it:
+    Net::HTTP::Methods::patch::log_request,
+    LWP::UserAgent::patch::https_hard_timeout.
+
+    Some examples of modules that use Module::Patch directly:
+    Log::Any::For::Class.
 
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>

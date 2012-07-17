@@ -1,5 +1,5 @@
 ---
-abstract: 'Base class for patch module'
+abstract: 'Patch package with a set of patches'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
 build_requires:
@@ -21,8 +21,9 @@ requires:
   Log::Any: 0
   Module::Loaded: 0
   Monkey::Patch: 0
+  SHARYANTO::Package::Util: 0
   perl: 5.010001
 resources:
   homepage: http://search.cpan.org/dist/Module-Patch/
   repository: http://github.com/sharyanto/perl-Module-Patch
-version: 0.06
+version: 0.07

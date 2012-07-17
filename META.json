@@ -1,5 +1,5 @@
 {
-   "abstract" : "Base class for patch module",
+   "abstract" : "Patch package with a set of patches",
    "author" : [
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
@@ -29,6 +29,7 @@
             "Log::Any" : 0,
             "Module::Loaded" : 0,
             "Monkey::Patch" : 0,
+            "SHARYANTO::Package::Util" : 0,
             "perl" : "5.010001"
          }
       },
@@ -48,6 +49,6 @@
          "url" : "http://github.com/sharyanto/perl-Module-Patch"
       }
    },
-   "version" : "0.06"
+   "version" : "0.07"
 }
 

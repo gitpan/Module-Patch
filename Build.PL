@@ -16,12 +16,12 @@ my %module_build_args = (
   "configure_requires" => {
     "Module::Build" => "0.3601"
   },
-  "dist_abstract" => "Base class for patch module",
+  "dist_abstract" => "Patch package with a set of patches",
   "dist_author" => [
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Module-Patch",
-  "dist_version" => "0.06",
+  "dist_version" => "0.07",
   "license" => "perl",
   "module_name" => "Module::Patch",
   "recommends" => {},
@@ -30,6 +30,7 @@ my %module_build_args = (
     "Log::Any" => 0,
     "Module::Loaded" => 0,
     "Monkey::Patch" => 0,
+    "SHARYANTO::Package::Util" => 0,
     "perl" => "5.010001"
   },
   "script_files" => []
