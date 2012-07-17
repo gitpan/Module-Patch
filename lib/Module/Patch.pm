@@ -12,7 +12,7 @@ use Monkey::Patch qw();
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.08'; # VERSION
+our $VERSION = '0.09'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -126,8 +126,7 @@ sub patch_package {
         my @target_subs;
         my %tp = list_package_contents($target);
         for (keys %tp) {
-            if (/\A\w+\z/)  { push @target_subs, $_ }
-            #elsif (s/\A\*/) { push @target_subs, $_ }
+            if (ref($tp{$_}) eq 'CODE' && !/^\*/) { push @target_subs, $_ }
         }
 
         my $i = 0;
@@ -216,7 +215,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
