@@ -26,9 +26,9 @@
       },
       "runtime" : {
          "requires" : {
+            "Alt::Monkey::Patch::SHARYANTO" : "0.01",
             "Log::Any" : 0,
             "Module::Loaded" : 0,
-            "Monkey::Patch" : 0,
             "SHARYANTO::Package::Util" : 0,
             "perl" : "5.010001"
          }
@@ -49,6 +49,6 @@
          "url" : "http://github.com/sharyanto/perl-Module-Patch"
       }
    },
-   "version" : "0.09"
+   "version" : "0.10"
 }
 
