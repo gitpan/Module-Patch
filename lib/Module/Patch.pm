@@ -13,7 +13,7 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.10'; # VERSION
+our $VERSION = '0.11'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -63,9 +63,11 @@ sub import {
             } elsif ($v == 2) {
                 $mpv = "0.07-0.09";
             }
-            croak "$self requires Module::Patch $mpv ".
-                "(patch_data format v=$v), please install the older version of".
-                    " Module::Patch or upgrade $self to use v=$curv";
+            croak "$self ".(${$self."::VERSION"} // "?").
+                " requires Module::Patch $mpv (patch_data format v=$v),".
+                    " this is Module::Patch ".($Module::Patch::VERSION // '?').
+                        " (v=$curv), please install an older version of ".
+                            "Module::Patch or upgrade $self";
         } elsif ($v == 3) {
             # ok, current version
         } else {
@@ -140,7 +142,9 @@ sub patch_package {
         my @target_subs;
         my %tp = list_package_contents($target);
         for (keys %tp) {
-            if (reftype($tp{$_}) eq 'CODE' && !/^\*/) { push @target_subs, $_ }
+            if ((reftype($tp{$_}) // '') eq 'CODE' && !/^\*/) {
+                push @target_subs, $_;
+            }
         }
 
         my $i = 0;
@@ -228,7 +232,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
