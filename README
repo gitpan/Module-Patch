@@ -2,7 +2,7 @@ NAME
     Module::Patch - Patch package with a set of patches
 
 VERSION
-    version 0.11
+    version 0.12
 
 SYNOPSIS
     To use Module::Patch directly:
@@ -27,7 +27,7 @@ SYNOPSIS
 
      # in your patch module
 
-     package Some::Module::patch::your_category;
+     package Some::Module::Patch::YourCategory;
      use parent qw(Module::Patch);
 
      sub patch_data {
@@ -49,23 +49,23 @@ SYNOPSIS
 
      # using your patch module
 
-     use Some::Module::patch::your_category
+     use Some::Module::Patch::YourCategory
          -force => 1, # optional, force patch even if target version does not match
          -config => {a=>10, b=>20}, # optional, set config value
      ;
 
      # accessing per-patch-module config data
 
-     print $Some::Module::patch::your_category::config->{a}; # 10
-     print $Some::Module::patch::your_category::config->{c}; # 3, default value
+     print $Some::Module::Patch::YourCategory::config->{a}; # 10
+     print $Some::Module::Patch::YourCategory::config->{c}; # 3, default value
 
      # unpatch, restore original subroutines
-     no Some::Module::patch::your_category;
+     no Some::Module::Patch::YourCategory;
 
 DESCRIPTION
     Module::Patch is basically a convenient way to define and bundle a set
-    of patches. Actual patching is done by the nice
-    Alt::Monkey::Patch::SHARYANTO, which provides lexically scoped patching.
+    of patches. Actual patching is done by Alt::Monkey::Patch::SHARYANTO,
+    which provides lexically scoped patching.
 
     There are two ways to use this module:
 
@@ -77,8 +77,10 @@ DESCRIPTION
         subclassing Module::Patch and providing the patches_spec in
         patch_data() method.
 
-        Patch module should be named *Some::Module*::patch::*your_category*.
-        For example, HTTP::Daemon::patch::ipv6.
+        Patch module should be named *Some::Module*::Patch::*YourCategory*.
+        *YourCategory* should be a keyword or phrase (verb + obj) that
+        describes what the patch does. For example,
+        HTTP::Daemon::Patch::IPv6, LWP::UserAgent::Patch::LogResponse.
 
     *   require/import it directly
 
@@ -134,8 +136,8 @@ SEE ALSO
     Pod::Weaver::Plugin::ModulePatch
 
     Some examples of patch modules that use Module::Patch by subclassing it:
-    Net::HTTP::Methods::patch::log_request,
-    LWP::UserAgent::patch::https_hard_timeout.
+    Net::HTTP::Methods::Patch::LogResponse,
+    LWP::UserAgent::Patch::HTTPSHardTimeout.
 
     Some examples of modules that use Module::Patch directly:
     Log::Any::For::Class.

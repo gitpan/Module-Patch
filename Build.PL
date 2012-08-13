@@ -9,7 +9,6 @@ my %module_build_args = (
   "build_requires" => {
     "Capture::Tiny" => 0,
     "Module::Build" => "0.3601",
-    "Module::Load" => 0,
     "Test::Exception" => 0,
     "Test::More" => "0.96"
   },
@@ -21,7 +20,7 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Module-Patch",
-  "dist_version" => "0.11",
+  "dist_version" => "0.12",
   "license" => "perl",
   "module_name" => "Module::Patch",
   "recommends" => {},
@@ -29,7 +28,7 @@ my %module_build_args = (
   "requires" => {
     "Alt::Monkey::Patch::SHARYANTO" => "0.01",
     "Log::Any" => 0,
-    "Module::Loaded" => 0,
+    "SHARYANTO::Array::Util" => 0,
     "SHARYANTO::Package::Util" => 0,
     "perl" => "5.010001"
   },
