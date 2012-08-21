@@ -4,7 +4,7 @@
       "Steven Haryanto <stevenharyanto@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Zilla version 4.300015, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Dist::Zilla version 4.300002, CPAN::Meta::Converter version 2.112150",
    "license" : [
       "perl_5"
    ],
@@ -27,16 +27,16 @@
       "runtime" : {
          "requires" : {
             "Alt::Monkey::Patch::SHARYANTO" : "0.01",
-            "Log::Any" : "0",
-            "SHARYANTO::Array::Util" : "0",
-            "SHARYANTO::Package::Util" : "0",
+            "Log::Any" : 0,
+            "SHARYANTO::Array::Util" : 0,
+            "SHARYANTO::Package::Util" : 0,
             "perl" : "5.010001"
          }
       },
       "test" : {
          "requires" : {
-            "Capture::Tiny" : "0",
-            "Test::Exception" : "0",
+            "Capture::Tiny" : 0,
+            "Test::Exception" : 0,
             "Test::More" : "0.96"
          }
       }
@@ -48,6 +48,6 @@
          "url" : "http://github.com/sharyanto/perl-Module-Patch"
       }
    },
-   "version" : "0.12"
+   "version" : "0.13"
 }
 

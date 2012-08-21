@@ -13,7 +13,7 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.12'; # VERSION
+our $VERSION = '0.13'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -232,13 +232,13 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.12
+version 0.13
 
 =head1 SYNOPSIS
 
 To use Module::Patch directly:
 
- # patching DBI modules so that
+ # patching DBI modules so that calls are logged
 
  use Module::Patch qw(patch_package);
  use Log::Any '$log';
@@ -263,7 +263,7 @@ To create a patch module by subclassing Module::Patch:
 
  sub patch_data {
      return {
-         v => 2,
+         v => 3,
          patches => [...], # $patches_spec
          config => { # per-patch-module config
              a => {

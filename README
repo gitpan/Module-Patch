@@ -2,12 +2,12 @@ NAME
     Module::Patch - Patch package with a set of patches
 
 VERSION
-    version 0.12
+    version 0.13
 
 SYNOPSIS
     To use Module::Patch directly:
 
-     # patching DBI modules so that
+     # patching DBI modules so that calls are logged
 
      use Module::Patch qw(patch_package);
      use Log::Any '$log';
@@ -32,7 +32,7 @@ SYNOPSIS
 
      sub patch_data {
          return {
-             v => 2,
+             v => 3,
              patches => [...], # $patches_spec
              config => { # per-patch-module config
                  a => {
