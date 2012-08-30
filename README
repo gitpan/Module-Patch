@@ -2,7 +2,7 @@ NAME
     Module::Patch - Patch package with a set of patches
 
 VERSION
-    version 0.13
+    version 0.14
 
 SYNOPSIS
     To use Module::Patch directly:
@@ -64,8 +64,8 @@ SYNOPSIS
 
 DESCRIPTION
     Module::Patch is basically a convenient way to define and bundle a set
-    of patches. Actual patching is done by Alt::Monkey::Patch::SHARYANTO,
-    which provides lexically scoped patching.
+    of patches. Actual patching is done by Monkey::Patch::Action, which
+    provides lexically scoped patching.
 
     There are two ways to use this module:
 
@@ -131,12 +131,12 @@ FUNCTIONS
         default is to warn and skip patching.
 
 SEE ALSO
-    Alt::Monkey::Patch::SHARYANTO
+    Monkey::Patch::Action
 
     Pod::Weaver::Plugin::ModulePatch
 
     Some examples of patch modules that use Module::Patch by subclassing it:
-    Net::HTTP::Methods::Patch::LogResponse,
+    Net::HTTP::Methods::Patch::LogRequest,
     LWP::UserAgent::Patch::HTTPSHardTimeout.
 
     Some examples of modules that use Module::Patch directly:

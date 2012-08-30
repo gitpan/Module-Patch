@@ -20,14 +20,14 @@ my %module_build_args = (
     "Steven Haryanto <stevenharyanto\@gmail.com>"
   ],
   "dist_name" => "Module-Patch",
-  "dist_version" => "0.13",
+  "dist_version" => "0.14",
   "license" => "perl",
   "module_name" => "Module::Patch",
   "recommends" => {},
   "recursive_test_files" => 1,
   "requires" => {
-    "Alt::Monkey::Patch::SHARYANTO" => "0.01",
     "Log::Any" => 0,
+    "Monkey::Patch::Action" => "0.01",
     "SHARYANTO::Array::Util" => 0,
     "SHARYANTO::Package::Util" => 0,
     "perl" => "5.010001"

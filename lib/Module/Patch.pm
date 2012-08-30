@@ -8,12 +8,12 @@ use Log::Any '$log';
 use Carp;
 use Module::Load;
 use Module::Loaded;
-use Alt::Monkey::Patch::SHARYANTO qw();
+use Monkey::Patch::Action qw();
 use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.13'; # VERSION
+our $VERSION = '0.14'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -209,7 +209,7 @@ sub patch_package {
             for my $s (@s) {
                 $log->tracef("Patching %s ...", $s);
                 $handles->{"$target\::$s"} =
-                    Alt::Monkey::Patch::SHARYANTO::patch_package(
+                    Monkey::Patch::Action::patch_package(
                         $target, $s, $act, $pspec->{code});
             }
 
@@ -232,7 +232,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.13
+version 0.14
 
 =head1 SYNOPSIS
 
@@ -296,8 +296,8 @@ To create a patch module by subclassing Module::Patch:
 =head1 DESCRIPTION
 
 Module::Patch is basically a convenient way to define and bundle a set of
-patches. Actual patching is done by L<Alt::Monkey::Patch::SHARYANTO>, which
-provides lexically scoped patching.
+patches. Actual patching is done by L<Monkey::Patch::Action>, which provides
+lexically scoped patching.
 
 There are two ways to use this module:
 
@@ -377,12 +377,12 @@ warn and skip patching.
 
 =head1 SEE ALSO
 
-L<Alt::Monkey::Patch::SHARYANTO>
+L<Monkey::Patch::Action>
 
 L<Pod::Weaver::Plugin::ModulePatch>
 
 Some examples of patch modules that use Module::Patch by subclassing it:
-L<Net::HTTP::Methods::Patch::LogResponse>,
+L<Net::HTTP::Methods::Patch::LogRequest>,
 L<LWP::UserAgent::Patch::HTTPSHardTimeout>.
 
 Some examples of modules that use Module::Patch directly:
