@@ -18,3 +18,4 @@ t/lib/My/Target/patch/unknownsub.pm
 t/lib/My/Target/patch/unknownver.pm
 t/release-pod-coverage.t
 t/release-pod-syntax.t
+t/release-rinci.t

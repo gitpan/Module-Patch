@@ -13,7 +13,7 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.14'; # VERSION
+our $VERSION = '0.15'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -232,7 +232,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.14
+version 0.15
 
 =head1 SYNOPSIS
 
@@ -242,17 +242,20 @@ To use Module::Patch directly:
 
  use Module::Patch qw(patch_package);
  use Log::Any '$log';
- patch_package(['DBI', 'DBI::st', 'DBI::db'], [
+ my $handle = patch_package(['DBI', 'DBI::st', 'DBI::db'], [
      {action=>'wrap', mod_version=>':all', sub_name=>':public', code=>sub {
-         my $ctx      = shift;
-         my $orig_sub = shift;
+         my $ctx = shift;
+
          $log->tracef("Entering %s(%s) ...", $ctx->{orig_name}, \@_);
          my $res;
-         if (wantarray) { $res=[$orig_sub->(@_)] } else { $res=$orig_sub->(@_) }
+         if (wantarray) { $res=[$ctx->{orig}->(@_)] } else { $res=$ctx->{orig}->(@_) }
          $log->tracef("Returned from %s", $ctx->{orig_name});
          if (wantarray) { return @$res } else { return $res }
      }},
  ]);
+
+ # restore original
+ undef $handle;
 
 To create a patch module by subclassing Module::Patch:
 
@@ -315,12 +318,17 @@ I<YourCategory> should be a keyword or phrase (verb + obj) that describes what
 the patch does. For example, L<HTTP::Daemon::Patch::IPv6>,
 L<LWP::UserAgent::Patch::LogResponse>.
 
+Patch module should be use()'d, or require()'d + import()'ed instead of just
+require()'d, because the patching is done in import().
+
 =item * require/import it directly
 
 Module::Patch provides B<patch_package> which is the actual routine to do the
 patching.
 
 =back
+
+=for Pod::Coverage ^(unimport|patch_data)$
 
 =head1 FUNCTIONS
 
