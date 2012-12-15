@@ -2,7 +2,7 @@ NAME
     Module::Patch - Patch package with a set of patches
 
 VERSION
-    version 0.15
+    version 0.16
 
 SYNOPSIS
     To use Module::Patch directly:
@@ -106,11 +106,18 @@ FUNCTIONS
         Load target modules. Set to 0 if package is already defined in other
         files and cannot be require()-ed.
 
+    *   -warn_target_loaded => BOOL (default 1)
+
+        If set to false, do not warn if target modules are loaded before the
+        patch module. By default, it warns to prevent users making the
+        mistake of importing subroutines from target modules before they are
+        patched.
+
     *   -force => BOOL
 
         Will be passed to patch_package's \%opts.
 
-  patch_package($package, $patches_spec, \%opts)
+  patch_package($package, $patches_spec, \%opts) => HANDLE
     Patch target package $package with a set of patches.
 
     $patches_spec is an arrayref containing a series of patch specification.
@@ -135,6 +142,45 @@ FUNCTIONS
 
         Force patching even if target module version does not match. The
         default is to warn and skip patching.
+
+FAQ
+  This module does not work! The target module does not get patched!
+    It probably does. Some of the common mistakes are:
+
+    *   Not storing the handle
+
+        You do this:
+
+         patch_package(...);
+
+        instead of this:
+
+         my $handle = patch_package(...);
+
+        Since the handle is used to revert the patch, if you do not store
+        $handle, you are basically patching and immediately reverting the
+        patch.
+
+    *   Importing before patching
+
+        If "Target::Module" exports symbols, and you patch one of the
+        default exports, the users need to patch before importing. Otherwise
+        he/she will get the unpatched version. For example, this won't work:
+
+         use Target::Module; # by default export foo
+         use Target::Module::Patch::Foo; # patches foo
+
+         foo(); # user gets the unpatched version
+
+        While this does:
+
+         use Target::Module::Patch::Foo; # patches foo
+         use Target::Module; # by default export foo
+
+         foo(); # user gets the unpatched version
+
+        Since 0.16, Module::Patch already warns this (unless "-load_target"
+        is set to false).
 
 SEE ALSO
     Monkey::Patch::Action

@@ -13,7 +13,7 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.15'; # VERSION
+our $VERSION = '0.16'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -80,7 +80,13 @@ sub import {
             or die "BUG: $self: Bad patch module name '$target', it should ".
                 "end with '::Patch::YourCategory'";
 
-        unless (is_loaded($target)) {
+        if (is_loaded($target)) {
+            if ($load && ($opts{-warn_target_loaded} // 1)) {
+                carp "$target is loaded before ".__PACKAGE__.", this is not ".
+                    "recommended since $target might export subs before ".
+                        __PACKAGE__." gets the chance to patch them";
+            }
+        } else {
             if ($load) {
                 load $target;
             } else {
@@ -232,7 +238,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 SYNOPSIS
 
@@ -347,13 +353,19 @@ on caller package. %opts include:
 Load target modules. Set to 0 if package is already defined in other files and
 cannot be require()-ed.
 
+=item * -warn_target_loaded => BOOL (default 1)
+
+If set to false, do not warn if target modules are loaded before the patch
+module. By default, it warns to prevent users making the mistake of importing
+subroutines from target modules before they are patched.
+
 =item * -force => BOOL
 
 Will be passed to patch_package's \%opts.
 
 =back
 
-=head2 patch_package($package, $patches_spec, \%opts)
+=head2 patch_package($package, $patches_spec, \%opts) => HANDLE
 
 Patch target package C<$package> with a set of patches.
 
@@ -380,6 +392,50 @@ Known options:
 
 Force patching even if target module version does not match. The default is to
 warn and skip patching.
+
+=back
+
+=head1 FAQ
+
+=head2 This module does not work! The target module does not get patched!
+
+It probably does. Some of the common mistakes are:
+
+=over
+
+=item * Not storing the handle
+
+You do this:
+
+ patch_package(...);
+
+instead of this:
+
+ my $handle = patch_package(...);
+
+Since the handle is used to revert the patch, if you do not store C<$handle>,
+you are basically patching and immediately reverting the patch.
+
+=item * Importing before patching
+
+If C<Target::Module> exports symbols, and you patch one of the default exports,
+the users need to patch before importing. Otherwise he/she will get the
+unpatched version. For example, this won't work:
+
+ use Target::Module; # by default export foo
+ use Target::Module::Patch::Foo; # patches foo
+
+ foo(); # user gets the unpatched version
+
+While this does:
+
+ use Target::Module::Patch::Foo; # patches foo
+ use Target::Module; # by default export foo
+
+ foo(); # user gets the unpatched version
+
+Since 0.16, Module::Patch already warns this (unless C<-load_target> is set to
+false).
 
 =back
 
