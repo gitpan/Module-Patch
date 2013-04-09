@@ -13,7 +13,7 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.16'; # VERSION
+our $VERSION = '0.17'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -48,6 +48,12 @@ sub import {
             delete $opts{-force};
         }
         $force //= 0;
+        my $warn;
+        if (exists $opts{-warn_target_loaded}) {
+            $warn = $opts{-warn_target_loaded};
+            delete $opts{-warn_target_loaded};
+        }
+        $warn //= 1;
 
         # patch already applied, ignore
         return if ${"$self\::handles"}; #W
@@ -81,7 +87,7 @@ sub import {
                 "end with '::Patch::YourCategory'";
 
         if (is_loaded($target)) {
-            if ($load && ($opts{-warn_target_loaded} // 1)) {
+            if ($load && $warn) {
                 carp "$target is loaded before ".__PACKAGE__.", this is not ".
                     "recommended since $target might export subs before ".
                         __PACKAGE__." gets the chance to patch them";
@@ -238,7 +244,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 SYNOPSIS
 
@@ -317,7 +323,7 @@ There are two ways to use this module:
 This is used for convenient bundling of patches. You create a I<patch module> (a
 module that monkey-patches other module by adding/replacing/wrapping/deleting
 subroutines of target module) by subclassing Module::Patch and providing the
-patches_spec in patch_data() method.
+patches specification in patch_data() method.
 
 Patch module should be named I<Some::Module>::Patch::I<YourCategory>.
 I<YourCategory> should be a keyword or phrase (verb + obj) that describes what
@@ -369,8 +375,8 @@ Will be passed to patch_package's \%opts.
 
 Patch target package C<$package> with a set of patches.
 
-C<$patches_spec> is an arrayref containing a series of patch specification.
-Patch specification is a hashref containing these keys: C<action> (string,
+C<$patches_spec> is an arrayref containing a series of patches specifications.
+Each patch specification is a hashref containing these keys: C<action> (string,
 required; either 'wrap', 'add', 'replace', 'add_or_replace', 'delete'),
 C<mod_version> (string/regex or array of string/regex, can be ':all' to mean all
 versions; optional; defaults to ':all'). C<sub_name> (string/regex or array of
@@ -379,10 +385,8 @@ string/regex, subroutine(s) to patch, can be ':all' to mean all subroutine,
 ':private' to mean all private), C<code> (coderef, not required if C<action> is
 'delete').
 
-Die if there is conflict with other patch modules (patchsets), for example if
-target module has been patched 'delete' and another patch wants to 'wrap' it.
-
-NOTE: conflict checking with other patchsets not yet implemented.
+Die if there is conflict with other patch modules, for example if target module
+has been patched 'delete' and another patch wants to 'wrap' it.
 
 Known options:
 
@@ -432,10 +436,10 @@ While this does:
  use Target::Module::Patch::Foo; # patches foo
  use Target::Module; # by default export foo
 
- foo(); # user gets the unpatched version
+ foo(); # user gets the patched version
 
-Since 0.16, Module::Patch already warns this (unless C<-load_target> is set to
-false).
+Since 0.16, Module::Patch already warns this (unless C<-load_target> or
+C<-warn_target_loaded> is set to false).
 
 =back
 
@@ -458,7 +462,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
