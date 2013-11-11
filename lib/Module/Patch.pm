@@ -13,11 +13,11 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.17'; # VERSION
+our $VERSION = '0.18'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
-#our %applied_patches; # for conflict checking
+my%loaded_by_us;
 
 sub import {
     no strict 'refs';
@@ -56,7 +56,7 @@ sub import {
         $warn //= 1;
 
         # patch already applied, ignore
-        return if ${"$self\::handles"}; #W
+        return if ${"$self\::handles"};
 
         my $pdata = $self->patch_data or
             die "BUG: $self: No patch data supplied";
@@ -86,7 +86,7 @@ sub import {
             or die "BUG: $self: Bad patch module name '$target', it should ".
                 "end with '::Patch::YourCategory'";
 
-        if (is_loaded($target)) {
+        if (is_loaded($target) && !$loaded_by_us{$target}) {
             if ($load && $warn) {
                 carp "$target is loaded before ".__PACKAGE__.", this is not ".
                     "recommended since $target might export subs before ".
@@ -95,6 +95,7 @@ sub import {
         } else {
             if ($load) {
                 load $target;
+                $loaded_by_us{$target}++;
             } else {
                 croak "FATAL: $self: $target is not loaded, please ".
                     "'use $target' before patching";
@@ -234,9 +235,11 @@ sub patch_package {
 1;
 # ABSTRACT: Patch package with a set of patches
 
-
 __END__
+
 =pod
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -244,7 +247,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.17
+version 0.18
 
 =head1 SYNOPSIS
 
@@ -399,6 +402,9 @@ warn and skip patching.
 
 =back
 
+
+None are exported by default, but they are exportable.
+
 =head1 FAQ
 
 =head2 This module does not work! The target module does not get patched!
@@ -456,6 +462,23 @@ L<LWP::UserAgent::Patch::HTTPSHardTimeout>.
 Some examples of modules that use Module::Patch directly:
 L<Log::Any::For::Class>.
 
+=head1 HOMEPAGE
+
+Please visit the project's homepage at L<https://metacpan.org/release/Module-Patch>.
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/sharyanto/perl-Module-Patch>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website
+L<https://rt.cpan.org/Public/Dist/Display.html?Name=Module-Patch>
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 AUTHOR
 
 Steven Haryanto <stevenharyanto@gmail.com>
@@ -468,4 +491,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

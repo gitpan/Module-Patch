@@ -2,7 +2,7 @@ NAME
     Module::Patch - Patch package with a set of patches
 
 VERSION
-    version 0.17
+    version 0.18
 
 SYNOPSIS
     To use Module::Patch directly:
@@ -141,6 +141,8 @@ FUNCTIONS
         Force patching even if target module version does not match. The
         default is to warn and skip patching.
 
+    None are exported by default, but they are exportable.
+
 FAQ
   This module does not work! The target module does not get patched!
     It probably does. Some of the common mistakes are:
@@ -191,6 +193,21 @@ SEE ALSO
 
     Some examples of modules that use Module::Patch directly:
     Log::Any::For::Class.
+
+HOMEPAGE
+    Please visit the project's homepage at
+    <https://metacpan.org/release/Module-Patch>.
+
+SOURCE
+    Source repository is at
+    <https://github.com/sharyanto/perl-Module-Patch>.
+
+BUGS
+    Please report any bugs or feature requests on the bugtracker website
+    <https://rt.cpan.org/Public/Dist/Display.html?Name=Module-Patch>
+
+    When submitting a bug or request, please include a test-file or a patch
+    to an existing test-file that illustrates the bug or desired feature.
 
 AUTHOR
     Steven Haryanto <stevenharyanto@gmail.com>

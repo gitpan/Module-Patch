@@ -1,10 +1,10 @@
-Build.PL
 Changes
 LICENSE
 MANIFEST
 MANIFEST.SKIP
 META.json
 META.yml
+Makefile.PL
 README
 dist.ini
 lib/Module/Patch.pm
@@ -19,3 +19,4 @@ t/lib/My/Target/patch/unknownver.pm
 t/release-pod-coverage.t
 t/release-pod-syntax.t
 t/release-rinci.t
+weaver.ini
