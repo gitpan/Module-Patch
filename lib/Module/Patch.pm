@@ -3,6 +3,7 @@ package Module::Patch;
 use 5.010001;
 use strict;
 use warnings;
+use experimental 'smartmatch';
 use Log::Any '$log';
 
 use Carp;
@@ -13,7 +14,7 @@ use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
 use SHARYANTO::Package::Util qw(list_package_contents package_exists);
 
-our $VERSION = '0.18'; # VERSION
+our $VERSION = '0.19'; # VERSION
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -239,7 +240,7 @@ __END__
 
 =pod
 
-=encoding utf-8
+=encoding UTF-8
 
 =head1 NAME
 
@@ -247,7 +248,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-version 0.18
+This document describes version 0.19 of Module::Patch (from Perl distribution Module-Patch), released on 2014-05-26.
 
 =head1 SYNOPSIS
 
@@ -402,9 +403,6 @@ warn and skip patching.
 
 =back
 
-
-None are exported by default, but they are exportable.
-
 =head1 FAQ
 
 =head2 This module does not work! The target module does not get patched!
@@ -472,8 +470,7 @@ Source repository is at L<https://github.com/sharyanto/perl-Module-Patch>.
 
 =head1 BUGS
 
-Please report any bugs or feature requests on the bugtracker website
-L<https://rt.cpan.org/Public/Dist/Display.html?Name=Module-Patch>
+Please report any bugs or feature requests on the bugtracker website L<https://rt.cpan.org/Public/Dist/Display.html?Name=Module-Patch>
 
 When submitting a bug or request, please include a test-file or a
 patch to an existing test-file that illustrates the bug or desired
@@ -485,7 +482,7 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Steven Haryanto.
+This software is copyright (c) 2014 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
