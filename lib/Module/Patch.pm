@@ -1,5 +1,8 @@
 package Module::Patch;
 
+our $DATE = '2014-12-05'; # DATE
+our $VERSION = '0.20'; # VERSION
+
 use 5.010001;
 use strict;
 use warnings;
@@ -12,9 +15,7 @@ use Module::Loaded;
 use Monkey::Patch::Action qw();
 use Scalar::Util qw(reftype);
 use SHARYANTO::Array::Util qw(match_array_or_regex);
-use SHARYANTO::Package::Util qw(list_package_contents package_exists);
-
-our $VERSION = '0.19'; # VERSION
+use Package::MoreUtil qw(list_package_contents package_exists);
 
 our @EXPORT_OK = qw(patch_package);
 
@@ -248,7 +249,7 @@ Module::Patch - Patch package with a set of patches
 
 =head1 VERSION
 
-This document describes version 0.19 of Module::Patch (from Perl distribution Module-Patch), released on 2014-05-26.
+This document describes version 0.20 of Module::Patch (from Perl distribution Module-Patch), released on 2014-12-05.
 
 =head1 SYNOPSIS
 
@@ -466,7 +467,7 @@ Please visit the project's homepage at L<https://metacpan.org/release/Module-Pat
 
 =head1 SOURCE
 
-Source repository is at L<https://github.com/sharyanto/perl-Module-Patch>.
+Source repository is at L<https://github.com/perlancar/perl-Module-Patch>.
 
 =head1 BUGS
 
@@ -478,11 +479,11 @@ feature.
 
 =head1 AUTHOR
 
-Steven Haryanto <stevenharyanto@gmail.com>
+perlancar <perlancar@cpan.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2014 by Steven Haryanto.
+This software is copyright (c) 2014 by perlancar@cpan.org.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
